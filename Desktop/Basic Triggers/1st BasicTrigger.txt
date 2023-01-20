@@ -1,0 +1,14 @@
+trigger TriggerContactToAccountSync on Contact (after insert, after update) {
+    if(trigger.isAfter && trigger.isInsert){
+        //ContactToAccountSync obj=new ContactToAccountSync();
+        ContactToAccountSync.afterInsertContact(trigger.new);
+    }
+    if(trigger.isAfter && trigger.isUpdate){
+        
+        ContactToAccountSync.afterUpdateContacts(trigger.oldMap,trigger.new);
+    }
+    if(trigger.isAfter && trigger.isDelete){
+        ContactToAccountSync.afterDeleteContacts(trigger.old);
+        
+    }
+}
