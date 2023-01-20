@@ -1,0 +1,18 @@
+@isTest
+public class TestFutureMethodOncontact {
+    @isTest
+    static void createContactTest(){
+    //userFromFamilyHeadUsingFuture Future = new userFromFamilyHeadUsingFuture();
+    
+    FutureMethodOnContact.createContact();
+    
+    }
+    @isTest
+    static void CreateUserTest(){
+        string FirstName;
+        string LastName;
+        String Email;
+       FutureMethodOnContact.createUserFromContact(FirstName, LastName, Email) ;
+      
+    }
+}
