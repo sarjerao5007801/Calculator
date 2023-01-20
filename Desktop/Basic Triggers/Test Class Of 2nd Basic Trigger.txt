@@ -1,0 +1,29 @@
+@isTest
+public class TestOpportunityHandler {
+    @TestSetup
+    public static void myTest(){
+        List<Account> accList=new List<Account>();
+        Account acc=new Account();
+        acc.Name='Pujari';
+        acc.Total_Amount__c=0;
+        accList.add(acc);
+        insert accList;
+        
+        List<Opportunity> oppList=new List<Opportunity>();
+        Opportunity opp=new Opportunity();
+        opp.Name='TestOpp';
+        opp.Amount=56655;
+        opp.StageName='Closed Won';
+        opp.CloseDate=Date.newInstance(2022, 03, 28);
+        opp.AccountId = acc.Id;
+        oppList.add(opp);
+        insert oppList;
+    }
+    @isTest
+    public static void testCalculateOpportunityAmount(){
+        List<Opportunity> oppRecord=[Select Id, StageName, CloseDate, Amount, Account.Id, Account.Total_Amount__c from Opportunity where Name=:'TestOpp'];
+        OpportunityHandler.CalculateOpportunityAmount(oppRecord);
+        
+    }
+    
+}
