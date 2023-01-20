@@ -1,0 +1,62 @@
+public class ContactToAccountSync {
+    public static void afterInsertContact(List<contact>contactList){
+        list<account>accountUpdateList=new list<account>();
+        Map<Id,Account>accountIdMap=new  Map<Id,Account>();
+        Set<Id>accountIdSet=new Set<Id>();
+        for(contact c:contactList){
+            accountIdSet.add(c.AccountId); 
+        }
+        List<Account>accountList=[select description,Id from account where Id=:accountIdSet];
+        for(contact c:contactList){
+            for(account a:accountList){
+                if(c.accountId==a.Id){
+                    a.Description=c.AssistantPhone;
+                    //  accountList.add(a);            
+                }
+            }
+        }
+        update accountList;
+    }
+    
+    public static void afterUpdateContacts(Map<Id,Contact>oldContactMap,List<Contact>newContacts){
+        Set<Id>accountIdSet=new Set<Id>();
+        for(contact c:newContacts){
+            contact con=oldContactMap.get(c.Id);
+            if(con.AssistantPhone!=c.AssistantPhone){
+                accountIdSet.add(c.AccountId);  
+            }
+            
+        }
+        List<Account>accountList=[select description,Id from account where Id=:accountIdSet];
+        Map<Id,Account>accountIdMap=new  Map<Id,Account>();
+        list<account>accountUpdateList=new list<account>();
+        for(account a:accountList){
+            
+            accountIdMap.put(a.Id,a);
+            
+        }
+        
+        for(contact c:newContacts){
+            if(accountIdMap.keyset().contains(c.AccountId)){
+                account acc= accountIdMap.get(c.accountId);
+                acc.Description=c.AssistantPhone;
+                accountUpdateList.add(acc); 
+            }
+            
+        }
+        update accountUpdateList;
+    }
+    
+    public static void afterDeleteContacts(list<contact>deletedContacts){
+        Set<Id>accountIdSet=new Set<Id>();
+        for(contact c:deletedContacts){
+            accountIdSet.add(c.AccountId);  
+            
+        }
+        List<Account>accountList=[select description,Id from account where Id=:accountIdSet];
+        for(account a:accountList){
+            a.description='';
+        }
+        update accountList;
+    }
+}
