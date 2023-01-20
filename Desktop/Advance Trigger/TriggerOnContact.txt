@@ -1,0 +1,26 @@
+trigger ContactTrigger on Contact (before insert, after insert) {
+    
+   
+   
+    if(trigger.isInsert && trigger.isAfter){
+        HandlerVoter.sendEmail(trigger.new);        
+    }
+    
+    if(Trigger.isInsert && Trigger.isBefore  ){
+        VoterTriggerHandlerFlow.checkBoxNotChecked(Trigger.new);
+    }
+    
+    if( Trigger.isInsert && Trigger.isAfter ){
+        VoterTriggerHandlerFlow.checkBoxChecked(Trigger.new);
+    }
+    
+    
+}
+       // if(Trigger.isInsert && Trigger.isafter){
+        
+  /*   ContactTriggerHandlerClass.contactFlow(trigger.new);
+    }
+        if(Trigger.isInsert && Trigger.isBefore){ */
+        
+   //  ContactTriggerHandlerClass.contactCheckboxNotChecked(trigger.new);
+   // }
