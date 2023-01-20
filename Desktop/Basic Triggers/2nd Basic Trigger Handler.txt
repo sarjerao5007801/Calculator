@@ -1,0 +1,27 @@
+public class OpportunityHandler {
+   
+    
+    Public static void CalculateOpportunityAmount(List<Opportunity> Opp){
+         Double L1;
+         Double L2;
+        List<Account> List1=new List<Account>();
+        
+        Set<Id> Set1=New Set<Id>();
+        for(Opportunity x: Opp){
+           Set1.add(x.AccountId); 
+        }
+        L1 = limits.getCpuTime();
+        for(Account acc:[Select Id, Total_Amount__c,  (Select Amount from Opportunities) from Account where id in:Set1]){
+            acc.Total_Amount__c=0;
+            for(Opportunity oppt:acc.Opportunities){         
+            	acc.Total_Amount__c=acc.Total_Amount__c+oppt.Amount;
+                List1.add(acc);
+            }   
+        }
+        Update List1;
+        L1 = limits.getCpuTime();
+        
+      system.debug('CPU Time==='+(L2-L1));  
+    }
+
+}
