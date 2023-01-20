@@ -1,0 +1,144 @@
+//Class Of SOQL
+public class SOQL {
+    
+    // Q-1)Method For Contact List
+    Public Static void contactList(){     
+        List<Contact> ConList = [Select Id, Name from Contact];
+        System.debug('Size Of ConList :'+ ConList.size());
+        
+        For(Contact Con : ConList ){
+            System.debug('List Of All Contacts'+Con);
+            
+        }
+    }
+    
+    // Q-2)Method For Active Users And Map Of Account
+    Public Static Void ActiveUsers(){
+        //Map To Print All Active Users.
+        Map<ID,User> ActiveUserMap =new  Map<ID,User>([Select id,Name,IsActive From User Where IsActive = true]);
+        System.debug(ActiveUserMap);
+    }
+   
+    //Q-3) A
+    //Account Name as key and AccountId as value.
+    Public Static Void AccountNameId(){
+        Map<String,string> AccIdValue = new  Map<String,string>();
+        For(Account Acc:[Select Id,Name From Account]){
+            AccIdValue.put(Acc.Id,Acc.Name);
+        }  
+        System.debug(AccIdValue);
+    } 
+    //Q-3) B
+    //Account Id as key and entire Account object as value.
+    Public Static Void IdAcoountObject(){
+        Map<Id,Account> Acc3=new Map<Id,Account>([Select Id,Name From Account]);
+        System.debug(Acc3);
+    }
+    
+    //Q-4)Enrollment Year for 2010
+    Public Static Void EnrollmentYear(){
+        list<Account> Year2010 = New list<Account>([select name,Enrollment_Year__c from Account where 	Enrollment_Year__c='2010']);
+        system.debug(Year2010);
+    } 
+    
+    //Q-4)Enrollment Year For 2013&2014
+    Public Static Void EnrollmentYear2(){
+        list<Account> Year = new  list<Account>([select name,Enrollment_Year__c from Account where Enrollment_Year__c='2013' AND Enrollment_Year__c='2014' ]);
+        System.debug(Year);
+    }
+    
+    // Q-5)find all Account records where 'Billing State' is not 'Maharashtra'&'Kerala'.
+    Public Static Void BillingState(){
+        List<Account> BS =new  List<Account>([Select Name,BillingState From Account Where BillingState NOT IN('Kerala','Maharashtra') ORDER BY BillingState DESC Limit 10000]);
+        System.debug(BS);
+    }
+    
+    // Aggregate Functions
+    // Q-1) Map- Key As Year And Value As Sum Of Amount
+    Public Static Void OpportunitySum(){
+        Map<Integer,Decimal> MapOfSum= New Map<Integer,Decimal>();
+        List<AggregateResult> List1 =[Select Sum(Amount) totalAmount,FiscalYear fiscaYr From Opportunity  where CloseDate > LAST_FISCAL_YEAR AND StageName LIKE 'Closed%' GROUP BY FiscalYear];
+        for(AggregateResult aggResult : List1)
+        {
+            MapOfSum.put((Integer)aggResult.get('fiscaYr'),(Decimal)aggResult.get('totalAmount'));
+            System.debug(MapOfSum);
+        }
+    }
+    
+    // Q-2) Records Based On Lead Source
+    Public Static Void LeadSource(){
+        List<AggregateResult> LeadList1 = [Select LeadSource,Count(Name) from lead GROUP BY LeadSource HAVING Count(Name)>10 ];
+        For(AggregateResult aggResult : LeadList1){
+            System.debug(aggResult);
+        }
+    }
+    
+   /* // Q-3)Write a SOQL query to find the total number of Lead records by status by Lead Source.
+Store this information in a map and display the same.
+(Hint:map<string,map<string,integer>>) */
+    Public Static Void DisplayLead(){
+        Map<String,Integer> Map1=New  Map<String,Integer>();
+        List<AggregateResult> LeadList2=[Select Count(Name) NUmberOfLeads , Status S From Lead GROUP BY Status];
+        For(AggregateResult aggResult :LeadList2 ){
+          Map1.put((string)aggResult.get('S'),(Integer)aggResult.get('NUmberOfLeads')); 
+            System.debug(Map1);
+        }
+        
+        Map<string,Map<String,Integer>> Map2=New Map<string,Map<String,Integer>>();
+         List<AggregateResult> LeadList3=[Select LeadSource source From Lead group by LeadSource];
+        For(AggregateResult aggresult :LeadList3){
+            Map2.put((string)aggResult.get('source'),Map1);
+            System.debug(Map2);
+        }
+        
+    }    
+    
+    
+   // RelationShip Query
+    // Q-1) A,B,C
+    Public Static Void ABC(){
+        List<C__c> List2=New List<C__c>([select Id,Name,A__r.id,B__r.id from C__c]);
+        System.debug(List2);
+    }
+    
+   //Child To Parent
+    // Q-1) Write a SOQL query on Contact to retrieve all active contacts belonging to 'media'
+    //Industry. Also display the name of the account to which it is associated.
+    Public Static Void MediaIndustry(){
+        List<Contact> ConList=New List<Contact>([Select Name, Id, Account.Industry, Account.Active__c From Contact Where Account.Industry='Media']);
+        System.debug(ConList);
+    } 
+    
+   /* //Q-2)Write a SOQL query on 'C'(created above) to retrieve all records of 'C' with name 'John'
+along with parent details. */
+    Public Static Void ParentName(){
+        List<C__c> List4=New List<C__c>([Select Name ,A__r.Id,A__r.Name,B__r.Id,B__r.Name From C__c]);
+        System.debug(List4);
+    }  
+  
+    
+    
+   //parent To child
+    // Q-1)Write a SOQL query on Account and find all associated contact records of the Account
+    //which contains the Name as 'John'. Print all Account and Contact records retrieved above.
+    Public Static Void Name(){
+        List<Account> AccList=New List<Account>([Select Name, Id ,(Select Id, Name From  Contacts Where Name='john') From Account]);
+        System.debug(AccList);
+    }
+   
+    
+    //Q-2)Write a SOQL query to find all Account records which have at least an opportunity record
+    //  which is 'Closed Won'. 
+    Public Static Void ClosedWon(){
+        List<Account> AccList2= New List<Account>([Select Name, (Select id,StageName From opportunities Where StageName='Closed Won') From Account]);
+        System.debug(AccList2);
+    } 
+    
+    //Q-3)Write a SOQL query on 'A' and retrieve all parents with all their child records where the
+    //child name is 'John'. 
+    Public Static Void ChildName(){
+        List<A__c> List3 = New List<A__c>([Select Id, Name, (Select Id, Name From Cs__r) From A__c]);
+        System.debug(List3);
+    } 
+    
+}
