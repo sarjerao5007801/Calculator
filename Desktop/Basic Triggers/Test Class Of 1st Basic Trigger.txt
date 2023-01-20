@@ -1,0 +1,48 @@
+@isTest
+public class TestContactToAccountSync {
+    @TestSetup
+    public static void myTest(){
+        //data has been created.
+        List<Account> accList=New List<Account>();
+        account acc=New Account();
+        acc.Name='Test1';
+        //acc.Description='Dec';
+        accList.add(acc);
+        Insert accList;
+    }
+    
+    @isTest
+    public static void testAfterInsertContact(){
+        //List<Contact> contactList=[Select Id, Name, Description from Contact where Name=:'Test1'];
+        List<Contact> cont=TestDataFactoryContactToAccountSync.createContact('Kadam','774388571',1);
+        
+        System.assertEquals(2, cont.size());
+        
+        list<contact>insertconlist=new list<contact>();
+        list<account> accList=[Select Id from Account ];
+        
+        system.assertEquals(1, accList.size());
+        for(Contact con: cont){
+            con.AccountId = accList[0].Id;
+            //  con.AssistantPhone='456';
+            insertconlist.add(con);
+        }
+        insert insertconlist; 
+        
+        for(contact c:insertconlist){
+            c.AssistantPhone='123';
+        }
+        update insertconlist;
+        
+        delete insertconlist;
+        /*@isTest
+        static void delcteContact(){
+            
+        List<Contact> deleteCon = new List<Contact>();
+            For(Contact conta : deleteCon){
+                
+            }
+            }*/
+        
+    }    
+}
