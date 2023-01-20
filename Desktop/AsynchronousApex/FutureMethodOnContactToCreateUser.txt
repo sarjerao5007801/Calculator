@@ -1,0 +1,38 @@
+public class FutureMethodOnContact {
+    public static void createContact(){
+        
+        Contact con = new Contact();
+        con.FirstName = 'Amol';
+        con.LastName = 'Lanke';
+        con.Family_Head__c = 'true';
+        con.Email ='sarjerao.p@deciphercloud.com';
+        con.MailingCountry = 'India';
+        con.MailingState = 'MH';
+        
+        Insert con;
+        createUserFromContact(con.FirstName, con.LastName, con.Email );
+        system.debug(con);
+    }
+    @future
+    public static void createUserFromContact(string FirstName, string LastName, string Email ){
+        //List<User> uList = new List<User>();
+           // Contact c = [select Id, Name, Family_Head__c, Family_Head_Name__c from Contact where Name ='Naina1' ];
+            User u = new User();
+            u.FirstName = FirstName;
+            u.LastName = LastName;
+            u.Alias = 'SSS';
+            u.Email = Email;
+            u.IsActive =true;
+            u.ProfileId ='00e5h000004K5fKAAS';
+            u.Username = 'sarjerao.p@deciphercloud.com';
+            u.TimeZoneSidKey = 'America/Los_Angeles';
+            u.LocaleSidKey = 'en_US';
+            u.EmailEncodingKey = 'UTF-8';
+            u.LanguageLocaleKey = 'en_US'; 
+        
+        
+        insert u;
+        system.debug(u);
+    }
+    
+}
