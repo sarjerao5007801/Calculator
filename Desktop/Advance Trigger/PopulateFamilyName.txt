@@ -1,0 +1,12 @@
+public class PopulateFamilyName {
+    Public Static Void FamilyName(List<Contact> Con){
+       Set<Id> Set1=New Set<Id>();
+        For(Contact x:Con){
+            //If(String.isBlank(AccountId)==True && Is_family_Head__c==True){
+               Set1.add(x.VoterId__c);
+            }
+        }
+        List<String> List1=New List<String>();
+      //  For(Contact y: [select Id,LastName From Contact where id IN:Set1]){
+            
+        }
