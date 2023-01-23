@@ -1,0 +1,17 @@
+public class CUPTime {
+    public static void DynamicCpuTime(){
+        integer StartcpuTime;
+        
+        contact con=[select id, Name from Contact limit 1];
+        
+       StartcpuTime = limits.getCpuTime();
+        
+        for(integer i=0; i<=100; i++){
+            
+           // Measure CPU time. 
+        }
+        
+       system.debug('CPU Time===' + string.valueof(limits.getCpuTime() - StartcpuTime )); 
+    }
+
+}
